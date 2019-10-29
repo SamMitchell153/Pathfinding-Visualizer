@@ -3,6 +3,7 @@ import Node from "./Node/Node";
 import { dijkstra, getNodesInShortestPathOrder } from "../algorithms/dijkstra";
 
 import "./PathfindingVisualizer.css";
+import { aStar } from "../algorithms/astar";
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -38,7 +39,7 @@ export default class PathfindingVisualizer extends Component {
 		this.setState({ mouseIsPressed: false });
 	}
 
-	animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+	animate(visitedNodesInOrder, nodesInShortestPathOrder) {
 		for (let i = 0; i <= visitedNodesInOrder.length; i++) {
 			if (i === visitedNodesInOrder.length) {
 				setTimeout(() => {
@@ -70,7 +71,16 @@ export default class PathfindingVisualizer extends Component {
 		const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
 		const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
 		const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-		this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+		this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
+	}
+
+	visualizeAStar() {
+		const { grid } = this.state;
+		const startNode = grid[START_NODE_ROW][START_NODE_COL];
+		const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+		const visitedNodesInOrder = aStar(grid, startNode, finishNode);
+		const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+		this.animate(visitedNodesInOrder, nodesInShortestPathOrder);
 	}
 
 	render() {
@@ -80,6 +90,9 @@ export default class PathfindingVisualizer extends Component {
 			<>
 				<button onClick={() => this.visualizeDijkstra()}>
 					Visualize Dijkstra's Algorithm
+				</button>
+				<button onClick={() => this.visualizeAStar()}>
+					Visualize A* Algorithm
 				</button>
 				<div className="grid">
 					{grid.map((row, rowIdx) => {
@@ -130,6 +143,7 @@ const createNode = (col, row) => {
 		isStart: row === START_NODE_ROW && col === START_NODE_COL,
 		isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
 		distance: Infinity,
+		distanceToEnd: Infinity,
 		isVisited: false,
 		isWall: false,
 		previousNode: null
