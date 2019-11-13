@@ -4,13 +4,19 @@
 	outline: 1px solid rgb(20, 216, 248);
 	display: inline-block;
 }
+.halfSize .node {
+	width: 10px;
+	height: 10px;
+}
 
 .node-finish {
-	background-color: red;
+	background-image: url("../../img/finishImage.png");
+	background-color: none;
 }
 
 .node-start {
-	background-color: green;
+	background-image: url("../../img/startImage.png");
+	background-color: none;
 }
 
 .node-visited {
